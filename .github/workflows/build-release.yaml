@@ -1,0 +1,59 @@
+name: Build Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            7.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release)
+        run: dotnet build --configuration Release --no-restore
+
+      # Zip all build output. This finds the first bin/Release folder if you have a single project.
+      - name: Create ZIP from build output
+        id: zip
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Find the primary build output directory (bin/Release)
+          BUILD_DIR="$(find . -type d -path '*/bin/Release/netstandard2.1' | head -n 1)"
+          if [[ -z "$BUILD_DIR" ]]; then
+            echo "No build output found (bin/Release/netstandard2.1)."
+            exit 1
+          fi
+          
+          rm $BUILD_DIR/*.deps.json
+
+          # Name the asset from repo + tag
+          ZIP_NAME="${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip"
+
+          # Zip the *contents* of the build dir (not the folder itself)
+          (cd "$BUILD_DIR" && zip -r "$GITHUB_WORKSPACE/$ZIP_NAME" .)
+
+          echo "zip_path=$GITHUB_WORKSPACE/$ZIP_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Attach ZIP to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.zip.outputs.zip_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
