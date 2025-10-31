@@ -65,21 +65,20 @@ jobs:
           PUB_ROOT="$GITHUB_WORKSPACE/publish"
           : > /tmp/zip_paths.txt
 
-          # For each published project folder, zip its *contents* (not the folder itself)
           for OUT_DIR in "$PUB_ROOT"/*; do
             [[ -d "$OUT_DIR" ]] || continue
             PROJ_NAME="$(basename "$OUT_DIR")"
             ZIP_NAME="${PROJ_NAME}-${TAG}.zip"
-            echo "Zipping $OUT_DIR -> $ZIP_NAME"
             (cd "$OUT_DIR" && zip -r "$GITHUB_WORKSPACE/$ZIP_NAME" . >/dev/null)
             echo "$GITHUB_WORKSPACE/$ZIP_NAME" >> /tmp/zip_paths.txt
           done
 
-          # Expose newline-separated list of zip paths as an output
+          # Write multiline output correctly (no quotes around the delimiter)
+          DELIM="__ZIP_LIST__"
           {
-            echo "files<<'EOF'"
+            echo "files<<$DELIM"
             cat /tmp/zip_paths.txt
-            echo "EOF"
+            echo "$DELIM"
           } >> "$GITHUB_OUTPUT"
 
       - name: Attach ZIPs to Release
