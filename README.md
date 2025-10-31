@@ -63,7 +63,7 @@ To customize audio:
 2. Go to the specific BepInEx plugin folder
    - **Thunderstore installation**
      1. Go to the Settings > Locations > Browse profile folder. (This opens a new explorer folder)
-     ![img.png](readme-img/folder.png)
+     ![img.png](https://raw.githubusercontent.com/Patrick-van-Halm/greyhack.audio-mod/refs/heads/main/readme-img/folder.png)
      2. Go to the installed mod folder:
      ```
      BepInEx/plugins/AudioMod/
