@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using AudioMod.Unity;
 using BepInEx;
-using BepInEx.Logging;
 using BepInEx.Unity.Mono;
 using HarmonyLib;
 using UnityEngine;
