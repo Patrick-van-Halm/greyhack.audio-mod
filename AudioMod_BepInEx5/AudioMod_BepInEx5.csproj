@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetName>AudioMod</TargetName>
+        <!-- If SolutionDir isn't provided by MSBuild (e.g., building the csproj directly),
+             fall back to the project’s parent folder as the “solution root”. Adjust ..\ as needed. -->
+        <SolutionDir Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)..\</SolutionDir>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
