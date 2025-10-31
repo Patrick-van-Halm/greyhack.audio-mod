@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetName>AudioMod</TargetName>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Krafs.Publicizer" Version="2.3.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Publicize Include="Assembly-CSharp" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="0Harmony">
+            <HintPath>lib\0Harmony.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+            <HintPath>$(SolutionDir)lib\Assembly-CSharp.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="BepInEx.Core">
+            <HintPath>lib\BepInEx.Core.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="BepInEx.Unity.Mono">
+            <HintPath>lib\BepInEx.Unity.Mono.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="OSA">
+            <HintPath>$(SolutionDir)lib\OSA.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+            <HintPath>$(SolutionDir)lib\Unity.TextMeshPro.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine">
+            <HintPath>$(SolutionDir)lib\UnityEngine.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.AnimationModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.AudioModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.CoreModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UI.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UIElementsModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UIElementsModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UIModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UIModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UnityWebRequestModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+            <HintPath>$(SolutionDir)lib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="$(SolutionDir)Audio\"  />
+        <Folder Include="$(SolutionDir)lib\" />
+        <Folder Include="lib\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(SolutionDir)Audio\**\*.*">
+            <Link>Audio\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <Compile Include="$(SolutionDir)src\**\*.cs">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <None Include="$(SolutionDir)changelog.md">
+            <Link>changelog.md</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="$(SolutionDir)icon.png">
+            <Link>icon.png</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="$(SolutionDir)manifest.json">
+            <Link>manifest.json</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Include="$(SolutionDir)README.md">
+            <Link>README.md</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+</Project>
