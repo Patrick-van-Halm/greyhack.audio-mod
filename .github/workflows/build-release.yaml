@@ -27,35 +27,64 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      - name: Build (Release)
-        run: dotnet build --configuration Release --no-restore
+      # Publish each project to its own folder under $GITHUB_WORKSPACE/publish/<ProjectName>
+      - name: Publish all projects (Release)
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      # Zip all build output. This finds the first bin/Release folder if you have a single project.
-      - name: Create ZIP from build output
+          # Find all csproj files (skip bin/obj). Add "-not -name '*Tests.csproj'" to skip tests.
+          mapfile -t PROJECTS < <(find . -type f -name '*.csproj' \
+                                    -not -path '*/bin/*' \
+                                    -not -path '*/obj/*' \
+                                    -print)
+
+          if [[ ${#PROJECTS[@]} -eq 0 ]]; then
+            echo "No .csproj files found."
+            exit 1
+          fi
+
+          PUB_ROOT="$GITHUB_WORKSPACE/publish"
+          rm -rf "$PUB_ROOT"
+          mkdir -p "$PUB_ROOT"
+
+          for PROJ in "${PROJECTS[@]}"; do
+            PROJ_NAME="$(basename "$PROJ" .csproj)"
+            OUT_DIR="$PUB_ROOT/$PROJ_NAME"
+            echo "Publishing $PROJ -> $OUT_DIR"
+            dotnet publish "$PROJ" --configuration Release --no-restore --output "$OUT_DIR"
+          done
+
+      - name: Zip published outputs
         id: zip
         shell: bash
         run: |
           set -euo pipefail
-          # Find the primary build output directory (bin/Release)
-          BUILD_DIR="$(find . -type d -path '*/bin/Release/netstandard2.1' | head -n 1)"
-          if [[ -z "$BUILD_DIR" ]]; then
-            echo "No build output found (bin/Release/netstandard2.1)."
-            exit 1
-          fi
-          
-          rm $BUILD_DIR/*.deps.json
 
-          # Name the asset from repo + tag
-          ZIP_NAME="${{ github.event.repository.name }}-${{ github.event.release.tag_name }}.zip"
+          TAG="${{ github.event.release.tag_name }}"
+          PUB_ROOT="$GITHUB_WORKSPACE/publish"
+          : > /tmp/zip_paths.txt
 
-          # Zip the *contents* of the build dir (not the folder itself)
-          (cd "$BUILD_DIR" && zip -r "$GITHUB_WORKSPACE/$ZIP_NAME" .)
+          # For each published project folder, zip its *contents* (not the folder itself)
+          for OUT_DIR in "$PUB_ROOT"/*; do
+            [[ -d "$OUT_DIR" ]] || continue
+            PROJ_NAME="$(basename "$OUT_DIR")"
+            ZIP_NAME="${PROJ_NAME}-${TAG}.zip"
+            echo "Zipping $OUT_DIR -> $ZIP_NAME"
+            (cd "$OUT_DIR" && zip -r "$GITHUB_WORKSPACE/$ZIP_NAME" . >/dev/null)
+            echo "$GITHUB_WORKSPACE/$ZIP_NAME" >> /tmp/zip_paths.txt
+          done
 
-          echo "zip_path=$GITHUB_WORKSPACE/$ZIP_NAME" >> "$GITHUB_OUTPUT"
+          # Expose newline-separated list of zip paths as an output
+          {
+            echo "files<<'EOF'"
+            cat /tmp/zip_paths.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Attach ZIP to Release
+      - name: Attach ZIPs to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.zip.outputs.zip_path }}
+          files: ${{ steps.zip.outputs.files }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

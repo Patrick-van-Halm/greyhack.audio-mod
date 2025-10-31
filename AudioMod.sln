@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMod", "AudioMod.csproj", "{602D4ABD-6267-4CBE-8169-4A0379FF8FF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMod_BepInEx5", "AudioMod_BepInEx5\AudioMod_BepInEx5.csproj", "{602D4ABD-6267-4CBE-8169-4A0379FF8FF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioMod_BepInEx6", "AudioMod_BepInEx6\AudioMod_BepInEx6.csproj", "{E2D7E732-139A-431C-8278-DF9DE947A289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{602D4ABD-6267-4CBE-8169-4A0379FF8FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{602D4ABD-6267-4CBE-8169-4A0379FF8FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{602D4ABD-6267-4CBE-8169-4A0379FF8FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2D7E732-139A-431C-8278-DF9DE947A289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2D7E732-139A-431C-8278-DF9DE947A289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2D7E732-139A-431C-8278-DF9DE947A289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2D7E732-139A-431C-8278-DF9DE947A289}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
