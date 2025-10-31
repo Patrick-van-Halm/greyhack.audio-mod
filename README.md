@@ -1,6 +1,3 @@
-Below is an improved `README.md` based on your requirements 👇
-Feel free to tweak wording!
-
 # Grey Hack Audio Mod
 
 This mod adds computer-like audio feedback to **Grey Hack**, enhancing immersion by simulating real system sounds.  
