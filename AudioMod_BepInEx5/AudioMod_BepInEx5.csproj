@@ -138,5 +138,10 @@
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
             <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
         </None>
+        <None Include="$(SolutionDir)readme-img\**\*.*">
+            <Link>readme-img\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>

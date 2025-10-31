@@ -119,23 +119,33 @@
         <Compile Include="$(SolutionDir)src\**\*.cs">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Compile>
-    </ItemGroup>
-    <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <None Include="$(SolutionDir).github\**\*.*">
+            <Link>.github\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </None>
         <None Include="$(SolutionDir)changelog.md">
             <Link>changelog.md</Link>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
         </None>
         <None Include="$(SolutionDir)icon.png">
             <Link>icon.png</Link>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
         </None>
         <None Include="$(SolutionDir)manifest.json">
             <Link>manifest.json</Link>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
         </None>
         <None Include="$(SolutionDir)README.md">
             <Link>README.md</Link>
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
+        </None>
+        <None Include="$(SolutionDir)readme-img\**\*.*">
+            <Link>readme-img\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 </Project>
