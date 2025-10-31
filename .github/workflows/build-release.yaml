@@ -27,55 +27,61 @@ jobs:
       - name: Restore
         run: dotnet restore
 
-      # Publish each project to its own folder under $GITHUB_WORKSPACE/publish/<ProjectName>
-      - name: Publish all projects (Release)
+      - name: Build all projects (Release)
         shell: bash
         run: |
           set -euo pipefail
-
-          # Find all csproj files (skip bin/obj). Add "-not -name '*Tests.csproj'" to skip tests.
+          # Find all csproj files (skip bin/obj). Uncomment the -not -name filter to skip test projects by naming convention.
           mapfile -t PROJECTS < <(find . -type f -name '*.csproj' \
                                     -not -path '*/bin/*' \
                                     -not -path '*/obj/*' \
                                     -print)
-
           if [[ ${#PROJECTS[@]} -eq 0 ]]; then
             echo "No .csproj files found."
             exit 1
           fi
 
-          PUB_ROOT="$GITHUB_WORKSPACE/publish"
-          rm -rf "$PUB_ROOT"
-          mkdir -p "$PUB_ROOT"
-
           for PROJ in "${PROJECTS[@]}"; do
-            PROJ_NAME="$(basename "$PROJ" .csproj)"
-            OUT_DIR="$PUB_ROOT/$PROJ_NAME"
-            echo "Publishing $PROJ -> $OUT_DIR"
-            dotnet publish "$PROJ" --configuration Release --no-restore --output "$OUT_DIR"
+            echo "Building: $PROJ"
+            dotnet build "$PROJ" --configuration Release --no-restore
           done
 
-      - name: Zip published outputs
+      - name: Zip each project's Release output
         id: zip
         shell: bash
         run: |
           set -euo pipefail
 
           TAG="${{ github.event.release.tag_name }}"
-          PUB_ROOT="$GITHUB_WORKSPACE/publish"
-          : > /tmp/zip_paths.txt
+          : > /tmp/zip_paths.txt  # clear file
 
-          # For each published project folder, zip its *contents* (not the folder itself)
-          for OUT_DIR in "$PUB_ROOT"/*; do
-            [[ -d "$OUT_DIR" ]] || continue
-            PROJ_NAME="$(basename "$OUT_DIR")"
+          mapfile -t PROJECTS < <(find . -type f -name '*.csproj' \
+                                    -not -path '*/bin/*' \
+                                    -not -path '*/obj/*' \
+                                    -print)
+
+          for PROJ in "${PROJECTS[@]}"; do
+            PROJ_DIR="$(dirname "$PROJ")"
+            PROJ_NAME="$(basename "$PROJ" .csproj)"
+
+            # Find the Release output directory that contains the main DLL (handles different TFMs).
+            OUT_DIR="$(find "$PROJ_DIR/bin/Release" -type f -name "$PROJ_NAME.dll" -printf '%h\n' | head -n 1 || true)"
+            if [[ -z "${OUT_DIR:-}" ]]; then
+              echo "No Release output found for $PROJ_NAME; looked in $PROJ_DIR/bin/Release"
+              exit 1
+            fi
+
+            # Optional: remove deps file if you don't want it in the zip
+            # rm -f "$OUT_DIR/$PROJ_NAME.deps.json" || true
+
             ZIP_NAME="${PROJ_NAME}-${TAG}.zip"
             echo "Zipping $OUT_DIR -> $ZIP_NAME"
             (cd "$OUT_DIR" && zip -r "$GITHUB_WORKSPACE/$ZIP_NAME" . >/dev/null)
+
             echo "$GITHUB_WORKSPACE/$ZIP_NAME" >> /tmp/zip_paths.txt
           done
 
-          # Expose newline-separated list of zip paths as an output
+          # Expose newline-separated list of zip paths as a single output
           {
             echo "files<<'EOF'"
             cat /tmp/zip_paths.txt
