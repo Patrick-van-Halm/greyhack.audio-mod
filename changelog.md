@@ -19,3 +19,7 @@
 disables the current SFX audio effects in the base game since these are in the mod already. Once there are new audio 
 effects introduced to the game that are not in the mod yet the mod will allow these.
 - Add ability to control the loudness of SFX using the in-game SFX volume slider in the Audio settings.
+
+## 0.2.1
+
+- Rename changelog.md to CHANGELOG.md to show it the changelog in the mod manager.
