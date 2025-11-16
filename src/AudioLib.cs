@@ -1,11 +1,14 @@
 ﻿using System.IO;
+using System.Linq;
 using AudioMod.Unity;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace AudioMod
 {
     public class AudioLib
     {
+        private const string SFX_AUDIO_GROUP_NAME = "SFX";
         private static string AudioDirectory = Path.Combine(Path.GetDirectoryName(Plugin.Info.Location), "Audio");
 
         public static AudioClip BootupBeep;
@@ -19,6 +22,9 @@ namespace AudioMod
         public static AudioClip CPUFanLoop;
         public static AudioClip TraceBeep;
         public static AudioClip SystemFailureLoop;
+
+        public static AudioMixer Mixer;
+        public static AudioMixerGroup? SfxAudioGroup => Mixer ? Mixer.FindMatchingGroups(SFX_AUDIO_GROUP_NAME).FirstOrDefault() : null;
         
         public static void Load()
         {

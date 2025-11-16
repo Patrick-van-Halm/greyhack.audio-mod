@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AudioMod.Unity;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace AudioMod.AudioSequence
 {
@@ -32,6 +33,7 @@ namespace AudioMod.AudioSequence
             foreach (var clip in _clips)
             {
                 var src = _audioManager.CreateSource();
+                src.outputAudioMixerGroup = AudioLib.SfxAudioGroup;
                 src.clip = clip;
                 src.playOnAwake = false;
                 _sources.Add(src);

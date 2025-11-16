@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using AudioMod.Unity;
 using UnityEngine;
+using Utils.Logging;
 
 namespace AudioMod.AudioSequence
 {
@@ -22,6 +23,7 @@ namespace AudioMod.AudioSequence
         protected AudioSource GetSource()
         {
             var source = _audioManager.CreateSource();
+            source.outputAudioMixerGroup = AudioLib.SfxAudioGroup;
             source.clip = _clip;
             source.playOnAwake = false;
             return source;
