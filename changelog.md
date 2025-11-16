@@ -23,3 +23,5 @@ effects introduced to the game that are not in the mod yet the mod will allow th
 ## 0.2.1
 
 - Rename changelog.md to CHANGELOG.md to show it the changelog in the mod manager.
+- Fix issue with Thunderstore folder structure.
+- Remove readme img from build files.

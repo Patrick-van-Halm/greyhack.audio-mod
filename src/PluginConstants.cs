@@ -4,6 +4,6 @@
     {
         public const string GUID = "nl.pvanhalm.plugins.greyhack.audio-mod";
         public const string NAME = "Audio Mod";
-        public const string VERSION = "0.2.0";
+        public const string VERSION = "0.2.1";
     }
 }
