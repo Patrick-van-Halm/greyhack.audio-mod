@@ -12,3 +12,9 @@
 ## 0.1.2
 
 - Improve readme and versioning
+
+## 0.2.0
+
+- Added support for game version v0.9.6153, this introduced a new feature for sfx player. This update of the mod 
+disables the current SFX audio in the base game since these are in the mod already. Once there are new audio effects in 
+the game that are not in the mod yet the mod will allow these.

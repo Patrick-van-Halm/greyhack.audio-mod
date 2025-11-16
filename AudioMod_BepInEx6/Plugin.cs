@@ -8,7 +8,7 @@ using Utils.Logging;
 
 namespace AudioMod
 {
-    [BepInPlugin("nl.pvanhalm.plugins.greyhack.audio-mod", "Audio Mod", "0.1.2")]
+    [BepInPlugin(PluginConstants.GUID, PluginConstants.NAME, PluginConstants.VERSION)]
     public class Plugin : BaseUnityPlugin
     {
         private bool _initialized;
